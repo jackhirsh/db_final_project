@@ -1,9 +1,8 @@
 import pymysql
 host = 'localhost'
 user = 'root'
-password = 'root'
+password = '19981212zS'
 db = 'climate'
-
 
 class DBManager:
     connection = None

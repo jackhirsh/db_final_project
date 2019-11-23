@@ -18,10 +18,22 @@ CREATE TABLE station
         REFERENCES location (id)
 );
 
+CREATE TABLE time
+(
+    timeID   INT PRIMARY KEY,
+    timeType VARCHAR(10) NOT NULL,
+    timeValue    DATE        NOT NULL
+);
+
 CREATE TABLE reading
 (
     readID INT PRIMARY KEY AUTO_INCREMENT,
-    type   VARCHAR(20) NOT NULL
+    type   INT NOT NULL,
+    station INT NOT NULL,
+    CONSTRAINT FOREIGN KEY (type)
+        REFERENCES time(timeID),
+    CONSTRAINT FOREIGN KEY (station)
+        REFERENCES station(id)
 );
 
 CREATE TABLE wind
@@ -53,13 +65,3 @@ CREATE TABLE precipitation
     CONSTRAINT FOREIGN KEY (id)
         REFERENCES reading (readID)
 );
-
-CREATE TABLE time
-(
-    timeID   INT PRIMARY KEY,
-    timeType VARCHAR(10) NOT NULL,
-    value    DATE        NOT NULL
-)
-
-
-
