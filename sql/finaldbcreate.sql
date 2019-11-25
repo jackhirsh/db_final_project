@@ -20,7 +20,7 @@ CREATE TABLE station
 
 CREATE TABLE time
 (
-    timeID   INT PRIMARY KEY,
+    timeID   INT PRIMARY KEY AUTO_INCREMENT,
     timeType VARCHAR(10) NOT NULL,
     timeValue    DATE        NOT NULL
 );

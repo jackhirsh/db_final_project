@@ -94,3 +94,17 @@ FROM
 END IF;
 END //
 delimiter ;
+
+-- adds a precipitation read
+DROP PROCEDURE IF EXISTS add_ppt_read;
+delimiter //
+USE climate //
+CREATE PROCEDURE add_ppt_read(IN dat DATE, IN stat INT, IN lvl INT)
+BEGIN
+    DECLARE rid INT;
+    INSERT INTO reading(type, station)
+    VALUES('precipitation', stat);
+    SELECT max(readID) into rid FROM reading;
+    INSERT INTO precipitation
+    VALUES(rid, lvl);
+END //
