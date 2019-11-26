@@ -103,4 +103,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 .idea/*
+.idea\*
 .idea/
+.idea\
+.idea/misc.xml
+.idea/db_final_project.iml
+*.xml
