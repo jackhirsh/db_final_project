@@ -33,6 +33,8 @@ class DBManager:
             except:
                 print('ERROR: Call Failed')
 
+    def get_all_info(self, weatherType):
+
 
     def get_login(self):
         self.user = input("Username: ")
