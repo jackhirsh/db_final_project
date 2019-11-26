@@ -65,3 +65,7 @@ CREATE TABLE precipitation
     CONSTRAINT FOREIGN KEY (id)
         REFERENCES reading (readID)
 );
+
+-- hard coding values into location and station to test procedure for now
+insert into location values(1,1,1,1);
+insert into station values(1,'one', 1);
