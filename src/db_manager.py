@@ -28,11 +28,13 @@ class DBManager:
         with self.connection:
             cur = self.connection.cursor()
             cur.execute("CALL print_all_info('{}')".format(weatherType))
-            all_info = cur.fetchone()
+            all_info = cur.fetchall()
             print(all_info)
     
     def add_reading(self, date, station, level, read_time_type, weatherType='p'):
         with self.connection:
             cur = self.connection.cursor()
-            arg_string = date + "," + read_time_type + "," + station + "," + level
-            cur.execute("CALL add_ppt_read('{}')".format(arg_string))
+            command = "CALL add_precipitation_read({})".format(
+                date + ',' + read_time_type + ',' + str(station) + ',' + str(level)
+            )
+            cur.execute(command)

@@ -7,7 +7,7 @@ help_list = {
     "Date Format:": "year-month-day EX: december 22th 2019 -> 2019-12-22",
     "printAll(weatherType):": "Prints all items of a given weather type",
     "printRange(weatherType, startDate, endDate)": "Prints all items of given weather type in date range",
-    "addReading(date, station, lvl)": "Adds a precipitation reading to the database"
+    "addReading(date, station, lvl, timeType)": "Adds a precipitation reading to the database"
 }
 
 weather_type = {
@@ -47,14 +47,32 @@ class App:
                 print("Invalid argument")
         elif "addreading" in command:
             print("adding reading")
-            arg_start = command.find("addReading(") + len("addReading(")
-            arg_set = command[arg_start:command.find(")")]
-            args = self.get_args(arg_set)
-            if len(args) != 3:
-                print("Incorrect number of arguments")
-            else:
-                try:
-                    
+            date = input("Enter the date: ")
+            date = "'" + str(date) + "'"
+
+            ttype = input("Enter the time type: ")
+            ttype = "'" + ttype + "'"
+
+            prec = input("Enter the precipitation level: ")
+            try:
+                prec = int(prec)
+            except:
+                print("Needs to be an int hoss")
+                return
+            
+            station = input("Enter the station id:" )
+            try:
+                station = int(station)
+            except:
+                print("Needs to be an int hoss")
+                return
+
+            try:
+                print("Im tryin")
+                self.manager.add_reading(date=date, read_time_type=ttype, level=prec, station=station)
+            except:
+                print("Failed to add reading")
+
 
     def get_args(self, arg_set):
         # Feed this an arg set (arg, arg, arg, arg,...) and it will return a list of args
@@ -71,7 +89,6 @@ class App:
             c_arg = un_parsed[0:comma]
             args.append(c_arg)
             un_parsed = un_parsed[comma+1:len(un_parsed)]
-            print(un_parsed)
         return args
 
     def print_help(self):
