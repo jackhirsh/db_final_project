@@ -1,4 +1,5 @@
-from src import db_manager as dbm
+from src.app import App
 
 if __name__ == "__main__":
-    manager = dbm.DBManager()
+    app = App()
+    app.start()
