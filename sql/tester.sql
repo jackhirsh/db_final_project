@@ -1,5 +1,5 @@
 USE climate;
 
-CALL print_all_info("precipitation");
-
-CALL add_ppt_read("2019-12-2", 1, 2);
+CALL print_all_info('precipitation');
+CALL add_precipitation_read('1990-09-01','daily',1,10);
+CALL print_all_info('precipitation');

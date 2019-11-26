@@ -14,7 +14,7 @@ BEGIN
                  JOIN
              precipitation ON reading.readID = precipitation.id
                  JOIN
-             time ON reading.type = time.timeID
+             time ON reading.time = time.timeID
                  JOIN
              station ON reading.station = station.id
                  JOIN
@@ -25,7 +25,7 @@ BEGIN
                  JOIN
              temperature ON reading.readID = temperature.id
                  JOIN
-             time ON reading.type = time.timeID
+             time ON reading.time = time.timeID
                  JOIN
              station ON reading.station = station.id
                  JOIN
@@ -36,7 +36,7 @@ BEGIN
                  JOIN
              wind ON reading.readID = wind.id
                  JOIN
-             time ON reading.type = time.timeID
+             time ON reading.time = time.timeID
                  JOIN
              station ON reading.station = station.id
                  JOIN
@@ -59,7 +59,7 @@ BEGIN
                  JOIN
              precipitation ON reading.readID = precipitation.id
                  JOIN
-             time ON reading.type = time.timeID
+             time ON reading.time = time.timeID
         WHERE time.timeValue >= start_date
           AND time.timeValue <= end_date;
     ELSEIF weather_type = 'temperature' THEN
@@ -68,7 +68,7 @@ BEGIN
                  JOIN
              temperature ON reading.readID = temperature.id
                  JOIN
-             time ON reading.type = time.timeID
+             time ON reading.time = time.timeID
         WHERE time.timeValue >= start_date
           AND time.timeValue <= end_date;
     ELSEIF weather_type = 'wind' THEN
@@ -77,7 +77,7 @@ BEGIN
                  JOIN
              wind ON reading.readID = wind.id
                  JOIN
-             time ON reading.type = time.timeID
+             time ON reading.time = time.timeID
         WHERE time.timeValue >= start_date
           AND time.timeValue <= end_date;
     END IF;
