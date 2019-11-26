@@ -28,9 +28,9 @@ CREATE TABLE time
 CREATE TABLE reading
 (
     readID INT PRIMARY KEY AUTO_INCREMENT,
-    type   INT NOT NULL,
+    time   INT NOT NULL,
     station INT NOT NULL,
-    CONSTRAINT FOREIGN KEY (type)
+    CONSTRAINT FOREIGN KEY (time)
         REFERENCES time(timeID),
     CONSTRAINT FOREIGN KEY (station)
         REFERENCES station(id)
