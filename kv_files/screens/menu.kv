@@ -1,0 +1,12 @@
+#:kivy 1.11.1
+#:import hex kivy.utils.get_color_from_hex
+
+<MainMenuScreen@CScreen>:
+    idn: 'mm_screen'
+    id: mm_screen
+    canvas:
+        Color:
+            rgba: hex("#d9d9d9")
+        Rectangle:
+            size: self.size
+            pos: self.pos

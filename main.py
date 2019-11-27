@@ -1,5 +1,5 @@
-from src.app import App
+from ui.app import ClimateApp
 
 if __name__ == "__main__":
-    app = App()
-    app.start()
+    app = ClimateApp()
+    app.run()

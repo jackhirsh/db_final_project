@@ -1,0 +1,79 @@
+#:kivy 1.11.1
+#:import hex kivy.utils.get_color_from_hex
+
+<LoginScreen@CScreen>:
+    idn: 's_screen'
+    id: login_screen
+    user: user_field.text
+    password: password_field.text
+    canvas:
+        Color:
+            rgba: hex("#d9d9d9")
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    CFlay:
+        idn: 'login_layout'
+        CLabel:
+            text: "Login to the Database"
+            font_size: root.width / 20
+            size_hint: .8, .2
+            pos_hint: {'center_x':.5, 'center_y':.8}
+            color: hex("#4f545c")
+        CInput:
+            idn: 'user_field'
+            id: user_field
+            size_hint: .6, .09
+            pos_hint: {'center_x':.6, 'center_y':.625}
+            font_size: root.width/30
+            multiline: False
+            focus: True
+            on_text_validate: password_field.focus = True
+            write_tab: False
+
+        CLabel:
+            idn: 'user_label'
+            size_hint: .1, .1
+            pos_hint: {'center_x':.2, 'center_y':.625}
+            text: 'Username:'
+            font_size: root.width / 30
+            color: hex("#4f545c")
+        
+        CInput:
+            idn: 'pass_field'
+            id: password_field
+            size_hint: .6, .09
+            pos_hint: {'center_x':.6, 'center_y':.44}
+            font_size: root.width/30
+            multiline: False
+            password: True
+            on_text_validate: print("Login Success: {}".format(login_screen.attempt_login()))
+            write_tab: False
+
+        CLabel:
+            idn: 'pass_label'
+            size_hint: .1, .1
+            pos_hint: {'center_x':.2, 'center_y':.44}
+            text: 'Password:'
+            font_size: root.width / 30
+            color: hex("#4f545c")
+
+        CButton:
+            idn: 'login'
+            id: submit_button
+            size_hint: .6, .15
+            pos_hint: {'center_x':.5, 'center_y':.25}
+            text: 'Login'
+            font_size: root.width / 25
+            on_release: print("Login Success: {}".format(login_screen.attempt_login()))
+
+        CLabel:
+            idn: 'failure_label'
+            id: fail_label
+            size_hint: 0, 0
+            pos_hint: {'x': 0, 'y': 1}
+            text: "Failed to connect to database \nTry entering your login info again and verify the server is running"
+            font_size: root.width/40
+            color: hex("#993c25")
+            text_size: self.size
+            halign: 'center'
