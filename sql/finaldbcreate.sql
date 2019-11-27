@@ -30,6 +30,7 @@ CREATE TABLE reading
     readID INT PRIMARY KEY AUTO_INCREMENT,
     time   INT NOT NULL,
     station INT NOT NULL,
+    typeOfRead VARCHAR(20) NOT NULL,
     CONSTRAINT FOREIGN KEY (time)
         REFERENCES time(timeID),
     CONSTRAINT FOREIGN KEY (station)
