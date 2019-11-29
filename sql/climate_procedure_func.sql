@@ -269,13 +269,15 @@ BEGIN
     VALUES (readingID, inmax, inmin, inavg);
 END //
 
--- adds a read type
+-- since the edit function hardcodes the types of read it can edit, maybe we shouldn't allow other types to be added
+/*
+ -- adds a read type
 DROP PROCEDURE IF EXISTS add_readType;
 CREATE PROCEDURE add_readType(IN rtype VARCHAR(20))
 BEGIN
     DECLARE exist INT;
     SELECT count(1) INTO exist FROM readtype WHERE type = rtype;
-    IF (exist = 0) THEN
+    IF exist = 0 THEN
         INSERT INTO readType
         VALUES (rtype);
     END IF;
@@ -287,8 +289,59 @@ CREATE PROCEDURE add_timeType(IN ttype VARCHAR(20))
 BEGIN
     DECLARE exist INT;
     SELECT count(1) INTO exist FROM timetype WHERE type = ttype;
-    IF (exist = 0) THEN
+    IF exist = 0 THEN
         INSERT INTO timeType
         VALUES (ttype);
     END IF;
 END //
+*/
+
+-- edits the field based on fieldNo (from left to right in columns not including ID and starting at 1)
+-- in a reading of given type
+DROP PROCEDURE IF EXISTS edit_read_field;
+CREATE PROCEDURE edit_read_field(IN idOfRead INT, IN fieldNo INT, IN newValue INT)
+BEGIN
+    DECLARE rtype VARCHAR(20);
+    SELECT typeOfRead INTO rtype FROM reading WHERE readID = idOfRead;
+    IF rtype = 'precipitation' THEN
+        UPDATE precipitation
+        SET level = newValue
+        WHERE id = idOfRead;
+    ELSEIF rtype = 'temperature' THEN
+        IF fieldNo = 1 THEN
+            UPDATE temperature
+            SET max = newValue
+            WHERE id = idOfRead;
+        ELSEIF fieldNo = 2 THEN
+            UPDATE temperature
+            SET min = newValue
+            WHERE id = idOfRead;
+        ELSEIF fieldNo = 3 THEN
+            UPDATE temperature
+            SET avg = newValue
+            WHERE id = idOfRead;
+        END IF;
+    ELSEIF rtype = 'wind' THEN
+        IF fieldNo = 1 THEN
+            UPDATE wind
+            SET peakSpeed = newValue
+            WHERE id = idOfRead;
+        ELSEIF fieldNo = 2 THEN
+            UPDATE wind
+            SET peakDir = newValue
+            WHERE id = idOfRead;
+        ELSEIF fieldNo = 3 THEN
+            UPDATE wind
+            SET sustSpeed = newValue
+            WHERE id = idOfRead;
+        ELSEIF fieldNo = 4 THEN
+            UPDATE wind
+            SET sustDir = newValue
+            WHERE id = idOfRead;
+        ELSEIF fieldNo = 5 THEN
+            UPDATE wind
+            SET avgSpeed = newValue
+            WHERE id = idOfRead;
+        END IF;
+    END IF;
+END//

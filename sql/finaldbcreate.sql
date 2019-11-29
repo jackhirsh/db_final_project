@@ -22,7 +22,7 @@ CREATE TABLE timeType
 (
     type VARCHAR(10) PRIMARY KEY
 );
--- hardcoding initial types of read time-frames available
+-- hardcoding types of read time-frames available
 INSERT INTO timeType
 VALUES ('annual');
 INSERT INTO timeType
@@ -43,7 +43,7 @@ CREATE TABLE readType
 (
     type VARCHAR(20) PRIMARY KEY
 );
--- hardcoding initial types of read types available
+-- hardcoding types of read types available
 INSERT INTO readType
 VALUES ('precipitation');
 INSERT INTO readType
