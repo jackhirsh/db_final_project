@@ -1,5 +1,7 @@
 import pymysql
 from getpass import getpass, getuser
+import sys
+from pymysql import err
 
 
 class DBManager:
@@ -25,7 +27,8 @@ class DBManager:
                 db=self.db
             )
             return True
-        except:
+        except (err.InternalError, err.OperationalError):
+            print("Database Error")
             return False
 
     def set_login(self, user, password, host='localhost', db='climate'):

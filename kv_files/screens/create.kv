@@ -1,0 +1,37 @@
+#:kivy 1.11.1
+#:import hex kivy.utils.get_color_from_hex
+<PForm@CFlay>:
+    idn: 'pform'
+    id: pform
+
+<WForm@CFlay>:
+    idn: 'wform'
+    id: pform
+
+<TForm@CFlay>:
+    idn: 'tform'
+    id: pform
+
+<CreateScreen@CScreen>:
+    idn: 'create_screen'
+    id: create_screen
+    canvas:
+        Color:
+            rgba: hex("#d9d9d9")
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    CFlay:
+        id: create_layout
+        CLabel:
+            text: "Selected Reading Type:"
+            size_hint: .5, .1
+            pos_hint: {'center_x':.3, 'center_y':.9}
+            color: hex("#4f545c")
+            font_size: root.width / 40
+        Spinner:
+            size_hint: .25, .1
+            pos_hint: {'center_x':.6, 'center_y':.9}
+            text: 'Reading Type'
+            values: 'Wind', 'Precipitation', 'Temperature'
+            on_text: print(self.text)
