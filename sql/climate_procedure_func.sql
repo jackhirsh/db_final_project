@@ -257,7 +257,7 @@ DROP PROCEDURE IF EXISTS add_temperature_read;
 DELIMITER //
 USE climate //
 CREATE PROCEDURE add_temperature_read(IN fullDate DATE, IN readTimeType VARCHAR(10), IN stationID INT,
-                               IN inmax INT, IN inmin INT, IN inavg INT)
+                                      IN inmax INT, IN inmin INT, IN inavg INT)
 BEGIN
     DECLARE readingID INT;
     DECLARE timeofID INT;
@@ -267,4 +267,28 @@ BEGIN
     SELECT getReadID('temperature', timeofID, stationID) INTO readingID;
     INSERT INTO temperature
     VALUES (readingID, inmax, inmin, inavg);
+END //
+
+-- adds a read type
+DROP PROCEDURE IF EXISTS add_readType;
+CREATE PROCEDURE add_readType(IN rtype VARCHAR(20))
+BEGIN
+    DECLARE exist INT;
+    SELECT count(1) INTO exist FROM readtype WHERE type = rtype;
+    IF (exist = 0) THEN
+        INSERT INTO readType
+        VALUES (rtype);
+    END IF;
+END;
+
+-- adds a time-frame type
+DROP PROCEDURE IF EXISTS add_timeType;
+CREATE PROCEDURE add_timeType(IN ttype VARCHAR(20))
+BEGIN
+    DECLARE exist INT;
+    SELECT count(1) INTO exist FROM timetype WHERE type = ttype;
+    IF (exist = 0) THEN
+        INSERT INTO timeType
+        VALUES (ttype);
+    END IF;
 END //

@@ -18,23 +18,51 @@ CREATE TABLE station
         REFERENCES location (id)
 );
 
+CREATE TABLE timeType
+(
+    type VARCHAR(10) PRIMARY KEY
+);
+-- hardcoding initial types of read time-frames available
+INSERT INTO timeType
+VALUES ('annual');
+INSERT INTO timeType
+VALUES ('daily');
+INSERT INTO timeType
+VALUES ('monthly');
+
 CREATE TABLE time
 (
-    timeID   INT PRIMARY KEY AUTO_INCREMENT,
-    timeType VARCHAR(10) NOT NULL,
-    timeValue    DATE        NOT NULL
+    timeID    INT PRIMARY KEY AUTO_INCREMENT,
+    timeType  VARCHAR(10) NOT NULL,
+    timeValue DATE        NOT NULL,
+    CONSTRAINT FOREIGN KEY (timeType)
+        REFERENCES timeType (type)
 );
+
+CREATE TABLE readType
+(
+    type VARCHAR(20) PRIMARY KEY
+);
+-- hardcoding initial types of read types available
+INSERT INTO readType
+VALUES ('precipitation');
+INSERT INTO readType
+VALUES ('wind');
+INSERT INTO readType
+VALUES ('temperature');
 
 CREATE TABLE reading
 (
-    readID INT PRIMARY KEY AUTO_INCREMENT,
-    time   INT NOT NULL,
-    station INT NOT NULL,
+    readID     INT PRIMARY KEY AUTO_INCREMENT,
+    time       INT         NOT NULL,
+    station    INT         NOT NULL,
     typeOfRead VARCHAR(20) NOT NULL,
     CONSTRAINT FOREIGN KEY (time)
-        REFERENCES time(timeID),
+        REFERENCES time (timeID),
     CONSTRAINT FOREIGN KEY (station)
-        REFERENCES station(id)
+        REFERENCES station (id),
+    CONSTRAINT FOREIGN KEY (typeOfRead)
+        REFERENCES readType (type)
 );
 
 CREATE TABLE wind
@@ -68,5 +96,7 @@ CREATE TABLE precipitation
 );
 
 -- hard coding values into location and station to test procedure for now
-insert into location values(1,1,1,1);
-insert into station values(1,'one', 1);
+INSERT INTO location
+VALUES (1, 1, 1, 1);
+INSERT INTO station
+VALUES (1, 'one', 1);
