@@ -345,3 +345,9 @@ BEGIN
         END IF;
     END IF;
 END//
+
+Drop PROCEDURE IF EXISTS get_stationIDs;
+create procedure get_stationIDs()
+BEGIN
+    SELECT id from station;
+END //
