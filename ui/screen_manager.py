@@ -4,7 +4,7 @@ from kivy.app import App
 from kivy.clock import Clock
 from ui.custom_widgets import CScreen
 
-IGNORELOGIN = True
+IGNORELOGIN = False
 
 
 class MainMenuScreen(CScreen):
@@ -50,6 +50,10 @@ class LoginScreen(CScreen):
         return result
 
 
+class CreateScreen(CScreen):
+    pass
+
+
 class MainManager(ScreenManager):
     '''
     Class responsible for managing the screens of the game and swapping
@@ -71,13 +75,15 @@ class MainManager(ScreenManager):
 
         # Initialize the screens and pass them some useful callbacks to have
         # access to internally
-        self.add_screen('main_menu', MainMenuScreen(
-            {
-                'switch': self.select_screen}))
-
         self.add_screen('login', LoginScreen(
             {
                 'login': self.login_to_db,
+                'switch': self.select_screen}))
+        self.add_screen('main_menu', MainMenuScreen(
+            {
+                'switch': self.select_screen}))
+        self.add_screen('create', CreateScreen(
+            {
                 'switch': self.select_screen}))
 
         # Start the app on the login screen

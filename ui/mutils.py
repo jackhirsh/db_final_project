@@ -7,10 +7,9 @@ import os
 def load_resources():
     Builder.load_file('kv_files/custom_widgets.kv')
     Builder.load_file('kv_files/main.kv')
-    Builder.load_file('kv_files/screens/*.kv')
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    kv_path = os.path.join(dir_path, 'kv_files')
-    screens = os.path.join(kv_path, 'screens')
+    Builder.load_file('kv_files/screens/login.kv')
+    Builder.load_file('kv_files/screens/menu.kv')
+    Builder.load_file('kv_files/screens/create.kv')
 
 
 def set_config(width=1280, height=800, resizable=False):
