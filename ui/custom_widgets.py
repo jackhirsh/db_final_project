@@ -54,9 +54,32 @@ class CInput(TextInput):
 
 class CForm(CFlay):
 
-    def get_stations(self):
-        # TODO don't hardcode this
-        return [1, 2, 3, 4]
+    def get_common(self):
+        result = {}
+        w = self.find_widgets()
+        result['date'] = w['picker'].get_date()
+        result['sid'] = w['sid'].text
+        result['t_type'] = w['t_type'].text
+        if result['sid'] == 'Station ID':
+            result['sid'] = -1
+        if result['t_type'] == 'Time Type':
+            result['t_type'] = -1
+
+        return result
+
+    def find_widgets(self):
+        w = {}
+        for widget in self.walk():
+            try:
+                if widget.idt == 'DatePicker':
+                    w['picker'] = widget
+                if widget.idn == 's_id':
+                    w['sid'] = widget
+                if widget.idn == 't_type':
+                    w['t_type'] = widget
+            except:
+                continue
+        return w
 
 
 class CSpinner(Spinner):
@@ -68,3 +91,14 @@ class CSpinner(Spinner):
         for i in range(start, end+1):
             x.append(str(i))
         return tuple(x)
+
+
+class DatePicker(CFlay):
+    day = StringProperty('')
+    month = StringProperty('')
+    year = StringProperty('')
+
+    def get_date(self):
+        if self.day != '' and self.month != '' and self.year != '':
+            return self.day + '/' + self.month + '/' + self.year
+        return -1

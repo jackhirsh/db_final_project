@@ -51,7 +51,16 @@ class LoginScreen(CScreen):
 
 
 class CreateScreen(CScreen):
-    pass
+    def get_common(self):
+        w = None
+        for widget in self.walk():
+            try:
+                if widget.idn == 'common_form':
+                    w = widget
+                    break
+            except:
+                continue
+        return w.get_common()
 
 
 class MainManager(ScreenManager):

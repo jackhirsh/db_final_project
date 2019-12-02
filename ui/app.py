@@ -28,3 +28,6 @@ class ClimateApp(App):
         '''
         self.dbm.set_login(user=user, password=password, host=host, db=db)
         return self.dbm.create_connection()
+
+    def get_stations(self):
+        return ('1', '2', '3', '42')
