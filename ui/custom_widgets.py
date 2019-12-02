@@ -5,8 +5,10 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.uix.image import Image
+from kivy.uix.spinner import Spinner
 from kivy.uix.textinput import TextInput
 from kivy.utils import get_color_from_hex
+from kivy.app import App
 
 import pprint
 
@@ -48,3 +50,21 @@ class CLabel(Label):
 class CInput(TextInput):
     idn = StringProperty('')
     idt = StringProperty('')
+
+
+class CForm(CFlay):
+
+    def get_stations(self):
+        # TODO don't hardcode this
+        return [1, 2, 3, 4]
+
+
+class CSpinner(Spinner):
+    idn = StringProperty('')
+    idt = StringProperty('')
+
+    def get_range(self, start, end):
+        x = []
+        for i in range(start, end+1):
+            x.append(str(i))
+        return tuple(x)

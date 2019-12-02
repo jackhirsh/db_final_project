@@ -16,3 +16,52 @@
 
 <CInput@TextInput>:
     idt: 'TextInput'
+
+<CSpinner@Spinner>:
+    idt: 'Spinner'
+
+<CForm@CFlay>:
+    idn: 'common_form'
+    id: cform
+    CInput:
+        idn: 'p_lvl'
+        id: p_lvl
+        size_hint: .1, .5
+        pos_hint: {'center_x':.5, 'center_y':.5}
+        font_size: root.width/30
+        multiline: False
+        focus: False
+        write_tab: False
+
+
+<DatePicker@CFlay>:
+    idt: 'DatePicker'
+    id: datepicker
+    CSpinner:
+        idn: 'day_spinner'
+        id: day_spinner
+        text: 'Day'
+        values: self.get_range(1,31)
+        size_hint: .3, 1
+        pos_hint: {'center_x':.2, 'center_y':.5}
+    CSpinner:
+        idn: 'day_spinner'
+        id: day_spinner
+        text: 'Day'
+        values: self.get_range(1,31)
+        size_hint: .3, 1
+        pos_hint: {'center_x':.2, 'center_y':.5}
+    CSpinner:
+        idn: 'day_spinner'
+        id: day_spinner
+        text: 'Day'
+        values: self.get_range(1,31)
+        size_hint: .3, 1
+        pos_hint: {'center_x':.2, 'center_y':.5}
+    
+
+
+
+
+
+    

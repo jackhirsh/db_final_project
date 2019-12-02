@@ -1,5 +1,6 @@
 #:kivy 1.11.1
 #:import hex kivy.utils.get_color_from_hex
+
 <PForm@CFlay>:
     idn: 'pform'
     id: pform
@@ -35,3 +36,6 @@
             text: 'Reading Type'
             values: 'Wind', 'Precipitation', 'Temperature'
             on_text: print(self.text)
+        CForm:
+            size_hint: .5, .25
+            pos_hint: {'center_x':.5, 'center_y':.5}

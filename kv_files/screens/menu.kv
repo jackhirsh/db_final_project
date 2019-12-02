@@ -20,30 +20,23 @@
         CButton:
             idn: 'create_data'
             id: create_button
-            size_hint: .2, .3
-            pos_hint: {'center_x':.2, 'center_y':.4}
+            size_hint: .8, .2
+            pos_hint: {'center_x':.5, 'center_y':.6}
             text: 'Enter Data'
             font_size: ((root.width+root.height)/60)
             on_release: mm_screen.callbacks['switch']('create')
         CButton:
-            idn: 'import_data'
-            id: import_button
-            size_hint: .2, .3
-            pos_hint: {'center_x':.4, 'center_y':.4}
-            text: 'Import Data'
-            font_size: ((root.width+root.height)/60)
-        CButton:
             idn: 'edit_data'
             id: import_button
-            size_hint: .2, .3
-            pos_hint: {'center_x':.6, 'center_y':.4}
+            size_hint: .8, .2
+            pos_hint: {'center_x':.5, 'center_y':.4}
             text: 'Edit Data'
             font_size: ((root.width+root.height)/60)
         CButton:
             idn: 'plot_data'
             id: plot_button
-            size_hint: .2, .3
-            pos_hint: {'center_x':.8, 'center_y':.4}
+            size_hint: .8, .2
+            pos_hint: {'center_x':.5, 'center_y':.2}
             text: 'Plot Data'
             font_size: ((root.width+root.height)/60)
             
