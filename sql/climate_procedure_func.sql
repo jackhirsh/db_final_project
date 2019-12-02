@@ -86,6 +86,8 @@ DELIMITER ;
 
 -- gets id of location with given values or null if such location not currently in database
 DROP FUNCTION IF EXISTS getLocationID;
+DELIMITER //
+USE climate //
 CREATE FUNCTION getLocationID(inlongitude INT, inlatitude INT, inelevation INT)
     RETURNS INT
     DETERMINISTIC
@@ -97,7 +99,8 @@ BEGIN
     FROM location
     WHERE inlongitude = longitude & inlatitude = latitude & inelevation = elevation;
     RETURN locID;
-END;
+END //
+DELIMITER ;
 
 -- adds a location
 DROP PROCEDURE IF EXISTS add_location;
@@ -112,6 +115,7 @@ BEGIN
         VALUES (inlongitude, inlatitude, inelevation);
     END IF;
 END //
+DELIMITER ;
 
 -- adds a station using location id
 DROP PROCEDURE IF EXISTS add_station_wLocID;
@@ -129,6 +133,7 @@ BEGIN
         VALUES (name, locationID);
     END IF;
 END //
+DELIMITER ;
 
 -- adds a station using location values
 DROP PROCEDURE IF EXISTS add_station;
@@ -156,9 +161,12 @@ BEGIN
         END IF;
     END IF;
 END //
+DELIMITER ;
 
 -- gets ID of time of given type and value, or null if it isn't currently stored in database
 DROP FUNCTION IF EXISTS getTimeID;
+DELIMITER //
+USE climate //
 CREATE FUNCTION getTimeID(tType VARCHAR(10), tVal INT)
     RETURNS INT
     DETERMINISTIC
@@ -170,7 +178,8 @@ BEGIN
     FROM time
     WHERE timeType = tType & timeValue = tVal;
     RETURN tID;
-END;
+END //
+DELIMITER ;
 
 -- adds a time
 DROP PROCEDURE IF EXISTS add_time;
@@ -185,9 +194,12 @@ BEGIN
         VALUES (tType, timeValue);
     END IF;
 END //
+DELIMITER ;
 
 -- gets ID of Reading of given type, time and station, or null if it isn't currently stored in database
 DROP FUNCTION IF EXISTS getReadID;
+DELIMITER //
+USE climate //
 CREATE FUNCTION getReadID(readtype VARCHAR(20), timeID INT, stationID INT)
     RETURNS INT
     DETERMINISTIC
@@ -199,7 +211,18 @@ BEGIN
     FROM reading
     WHERE readtype = typeOfRead & time = timeID & station = stationID;
     RETURN rID;
-END;
+END //
+DELIMITER ;
+
+-- gets the all the existing station_id from the database
+Drop PROCEDURE IF EXISTS get_stationIDs;
+DELIMITER //
+USE climate //
+create procedure get_stationIDs()
+BEGIN
+    SELECT id from station;
+END //
+DELIMITER ;
 
 -- adds a Read pointer that specifies a reading of type, station, and time but not the values of the read.
 -- For internal calls, not visible to front-end
@@ -215,7 +238,7 @@ BEGIN
         VALUES (readType, timeID, stationID);
     END IF;
 END //
-
+DELIMITER ;
 
 -- adds a precipitation read
 DROP PROCEDURE IF EXISTS add_precipitation_read;
@@ -233,6 +256,7 @@ BEGIN
     INSERT INTO precipitation
     VALUES (readingID, precipitationLevel);
 END //
+DELIMITER ;
 
 -- adds a wind read
 DROP PROCEDURE IF EXISTS add_wind_read;
@@ -251,6 +275,7 @@ BEGIN
     INSERT INTO wind
     VALUES (readingID, inpeakSpeed, inpeakDir, insustSpeed, insustDir, inavgSpeed);
 END //
+DELIMITER ;
 
 -- adds a temperature read
 DROP PROCEDURE IF EXISTS add_temperature_read;
@@ -268,6 +293,7 @@ BEGIN
     INSERT INTO temperature
     VALUES (readingID, inmax, inmin, inavg);
 END //
+DELIMITER ;
 
 -- since the edit function hardcodes the types of read it can edit, maybe we shouldn't allow other types to be added
 /*
@@ -299,6 +325,8 @@ END //
 -- edits the field based on fieldNo (from left to right in columns not including ID and starting at 1)
 -- in a reading of given type
 DROP PROCEDURE IF EXISTS edit_read_field;
+DELIMITER //
+USE climate //
 CREATE PROCEDURE edit_read_field(IN idOfRead INT, IN fieldNo INT, IN newValue INT)
 BEGIN
     DECLARE rtype VARCHAR(20);
@@ -344,4 +372,148 @@ BEGIN
             WHERE id = idOfRead;
         END IF;
     END IF;
-END//
+END //
+DELIMITER ;
+
+-- select the smallest reading id of the given date
+DROP FUNCTION IF EXISTS get_end_date_reading_id;
+delimiter //
+USE climate //
+CREATE FUNCTION get_end_date_reading_id(
+	end_date DATE
+)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+DECLARE end_date_reading_id INT;
+SELECT
+	MAX(reading.readID)
+INTO end_date_reading_id
+FROM
+	reading
+		JOIN
+	time ON reading.time = time.timeID
+WHERE
+	time.timeValue >= end_date;
+RETURN (end_date_reading_id);
+END //
+delimiter ;
+
+-- select the greatest reading id of the given date
+DROP FUNCTION IF EXISTS get_start_date_reading_id;
+delimiter //
+USE climate //
+CREATE FUNCTION get_start_date_reading_id(
+	start_date DATE
+)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+DECLARE start_date_reading_id INT;
+SELECT
+	MIN(reading.readID)
+INTO start_date_reading_id
+FROM
+	reading
+		JOIN
+	time ON reading.time = time.timeID
+WHERE
+	time.timeValue <= start_date;
+RETURN (start_date_reading_id);
+END //
+delimiter ;
+
+-- delete all the reading records that are read before or at the given date, regardless of
+-- the read type and time type
+DROP PROCEDURE IF EXISTS delete_reading_before_date;
+DELIMITER //
+USE climate //
+CREATE PROCEDURE delete_reading_before_date(IN end_date DATE)
+BEGIN
+DECLARE last_date_reading_id INT;
+SELECT get_end_date_reading_id(end_date) INTO last_date_reading_id;
+DELETE
+	FROM
+		reading
+	WHERE
+		reading.readID <= last_date_reading_id;
+END //
+DELIMITER ;
+
+-- delete all the reading records that are read after or at the given date, regardless
+-- of the read type and time type
+DROP PROCEDURE IF EXISTS delete_reading_after_date;
+DELIMITER //
+USE climate //
+CREATE PROCEDURE delete_reading_after_date(IN start_date DATE)
+BEGIN
+DECLARE first_date_reading_id INT;
+SELECT get_start_date_reading_id(start_date) INTO first_date_reading_id;
+DELETE
+	FROM
+		reading
+	WHERE
+		reading.readID >= first_date_reading_id;
+END //
+DELIMITER ;
+
+-- delete all the reading records that are read within a time range, regardless of the
+-- read type and time type
+DROP PROCEDURE IF EXISTS delete_reading_between_date;
+DELIMITER //
+USE climate //
+CREATE PROCEDURE delete_reading_between_date(IN start_date DATE, IN end_date DATE)
+BEGIN
+DECLARE start_id INT;
+DECLARE end_id INT;
+SELECT get_start_date_reading_id(start_date) INTO start_id;
+SELECT get_end_date_reading_id(end_date) INTO end_id;
+DELETE
+	FROM
+		reading
+	WHERE
+		reading.readID >= start_id AND reading.readID <= end_id;
+END //
+DELIMITER ;
+
+-- delete a station and all its related readings
+DROP PROCEDURE IF EXISTS delete_station;
+DELIMITER //
+USE climate //
+CREATE PROCEDURE delete_station(IN station_name VARCHAR(50))
+BEGIN
+DECLARE station_to_delete_id INT;
+SELECT station.id
+	INTO station_to_delete_id
+    FROM station
+    WHERE station.stationName = station_name;
+DELETE reading, station
+FROM reading
+	INNER JOIN
+station ON reading.station = station.id
+WHERE station.id = station_to_delete_id;
+END //
+DELIMITER ;
+
+-- delete a location and all its related readings
+DROP PROCEDURE IF EXISTS delete_location;
+DELIMITER //
+USE climate //
+CREATE PROCEDURE delete_location(IN longitude INT, IN latitude INT, IN elevation INT)
+BEGIN
+DECLARE location_to_delete_id INT;
+SELECT location.id
+	INTO location_to_delete_id
+    FROM location
+    WHERE location.longitude = longitude
+		AND location.latitude = latitude
+        AND location.elevation = elevation;
+DELETE reading, station, location
+FROM reading
+	INNER JOIN
+station ON reading.station = station.id
+	INNER JOIN
+location ON station.location = location.id
+WHERE location.id = location_to_delete_id;
+END //
+DELIMITER ;
