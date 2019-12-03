@@ -2,9 +2,9 @@ from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 from kivy.properties import StringProperty
 from kivy.app import App
 from kivy.clock import Clock
-from ui.custom_widgets import CScreen
+from ui.custom_widgets import CScreen, PForm, TForm, WForm
 
-IGNORELOGIN = False
+IGNORELOGIN = True
 
 
 class MainMenuScreen(CScreen):
@@ -45,12 +45,21 @@ class LoginScreen(CScreen):
             self.callbacks['switch']('main_menu')
         if IGNORELOGIN:
             Clock.schedule_once(
-                lambda dt: self.callbacks['switch']('main_menu'), 8)
+                lambda dt: self.callbacks['switch']('main_menu'), 1)
 
         return result
 
 
 class CreateScreen(CScreen):
+    p_form = None
+    w_form = None
+    t_form = None
+    l_form = None
+
+    def __init__(self, callbacks, **kwargs):
+        super(CreateScreen, self,).__init__(callbacks, **kwargs)
+        self.create_forms()
+
     def get_common(self):
         w = None
         for widget in self.walk():
@@ -61,6 +70,38 @@ class CreateScreen(CScreen):
             except:
                 continue
         return w.get_common()
+
+    def get_form(self):
+        values = self.l_form.get_values()
+        common = self.get_common()
+        d = {'val': values, 'common': common}
+        return d
+
+    def set_form_type(self, ftype):
+        # Remove the last form
+        if self.l_form != None:
+            self.remove_widget(self.l_form)
+
+        if ftype == 'Precipitation':
+            print('P form')
+            self.add_widget(self.p_form)
+            self.l_form = self.p_form
+        elif ftype == 'Wind':
+            print('W form')
+            self.add_widget(self.w_form)
+            self.l_form = self.w_form
+        elif ftype == 'Temperature':
+            print('T form')
+            self.add_widget(self.t_form)
+            self.l_form = self.t_form
+
+        self.l_form.size_hint = 1, .45
+        self.l_form.pos_hint = {'center_x': .5, 'center_y': .325}
+
+    def create_forms(self):
+        self.p_form = PForm()
+        self.w_form = WForm()
+        self.t_form = TForm()
 
 
 class MainManager(ScreenManager):

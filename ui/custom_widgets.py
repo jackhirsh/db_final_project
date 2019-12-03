@@ -82,6 +82,57 @@ class CForm(CFlay):
         return w
 
 
+class PForm(CFlay):
+
+    def get_values(self):
+        d = {}
+        for w in self.walk():
+            try:
+                if w.idn == 'p_lvl':
+                    d['level'] = w.text
+                    return d
+            except:
+                continue
+        return -1
+
+
+class WForm(CFlay):
+
+    def get_values(self):
+        d = {}
+        for w in self.walk():
+            try:
+                if w.idn == 'pspd':
+                    d['peak_speed'] = (w.text if len(w.text) > 0 else -1)
+                elif w.idn == 'pdir':
+                    d['peak_dir'] = (w.text if len(w.text) > 0 else -1)
+                elif w.idn == 'aspd':
+                    d['avg_speed'] = (w.text if len(w.text) > 0 else -1)
+                elif w.idn == 'sspeed':
+                    d['sust_speed'] = (w.text if len(w.text) > 0 else -1)
+                elif w.idn == 'sdir':
+                    d['sust_dir'] = (w.text if len(w.text) > 0 else -1)
+            except:
+                continue
+        return d
+
+
+class TForm(CFlay):
+    def get_values(self):
+        d = {}
+        for w in self.walk():
+            try:
+                if w.idn == 'max':
+                    d['max'] = w.text if len(w.text) > 0 else -1
+                elif w.idn == 'min':
+                    d['min'] = (w.text if len(w.text) > 0 else -1)
+                elif w.idn == 'avg':
+                    d['avg'] = (w.text if len(w.text) > 0 else -1)
+            except:
+                continue
+        return d
+
+
 class CSpinner(Spinner):
     idn = StringProperty('')
     idt = StringProperty('')
