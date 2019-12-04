@@ -97,7 +97,7 @@ BEGIN
     SELECT id
     INTO locID
     FROM location
-    WHERE inlongitude = longitude & inlatitude = latitude & inelevation = elevation;
+    WHERE (inlongitude = longitude) & (inlatitude = latitude) & (inelevation = elevation);
     RETURN locID;
 END //
 DELIMITER ;
@@ -127,7 +127,7 @@ BEGIN
     SELECT count(1)
     INTO exist
     FROM station
-    WHERE name = stationName & location = locationID;
+    WHERE (name = stationName) & (location = locationID);
     IF (exist = 0) THEN
         INSERT INTO station(stationname, location)
         VALUES (name, locationID);
@@ -147,7 +147,7 @@ BEGIN
     INTO exist
     FROM station s
              JOIN location l ON s.location = l.id
-    WHERE name = stationName & inlongitude = longitude & inlatitude = latitude & inelevation = elevation;
+    WHERE (name = stationName) & (inlongitude = longitude) & (inlatitude = latitude) & (inelevation = elevation);
     IF (exist = 0) THEN
         SELECT getLocationID(inlongitude, inlatitude, inelevation) INTO locID;
         IF (locID IS NULL) THEN
@@ -167,7 +167,7 @@ DELIMITER ;
 DROP FUNCTION IF EXISTS getTimeID;
 DELIMITER //
 USE climate //
-CREATE FUNCTION getTimeID(tType VARCHAR(10), tVal INT)
+CREATE FUNCTION getTimeID(tType VARCHAR(10), tVal DATE)
     RETURNS INT
     DETERMINISTIC
     READS SQL DATA
@@ -176,7 +176,7 @@ BEGIN
     SELECT timeID
     INTO tID
     FROM time
-    WHERE timeType = tType & timeValue = tVal;
+    WHERE (timeType = tType) & (timeValue = tVal);
     RETURN tID;
 END //
 DELIMITER ;
@@ -191,7 +191,7 @@ BEGIN
     SELECT getTimeID(tType, tVal) INTO exist;
     IF (exist IS NULL) THEN
         INSERT INTO time(timeType, timeValue)
-        VALUES (tType, timeValue);
+        VALUES (tType, tVal);
     END IF;
 END //
 DELIMITER ;
@@ -209,7 +209,7 @@ BEGIN
     SELECT readID
     INTO rID
     FROM reading
-    WHERE readtype = typeOfRead & time = timeID & station = stationID;
+    WHERE (readtype = typeOfRead) & (time = timeID) & (station = stationID);
     RETURN rID;
 END //
 DELIMITER ;
