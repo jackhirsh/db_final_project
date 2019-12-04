@@ -11,6 +11,7 @@ class DBManager:
     password = None
     db = None
     debug = None
+    connected = False
 
     def __init__(self, **kwargs):
         self.debug = True
@@ -26,6 +27,7 @@ class DBManager:
                 password=self.password,
                 db=self.db
             )
+            self.connected = True
             return True
         except (err.InternalError, err.OperationalError):
             print("Database Error")
@@ -61,3 +63,23 @@ class DBManager:
                 str(station) + ',' + str(level)
             )
             cur.execute(command)
+
+    def get_stations(self):
+        if not self.connected:
+            return '-1'
+        with self.connection:
+            cur = self.connection.cursor()
+            command = "CALL get_stationIDs()"
+            cur.execute(command)
+            rows = cur.fetchall()
+            stations = []
+            for row in rows:
+                stations.append(str(row[0]))
+            return stations
+
+    def call_procedure(self, procedure):
+        with self.connection:
+            cur = self.connection.cursor()
+            print("Executing: {}".format(procedure))
+            cur.execute(procedure)
+            return cur.fetchall()

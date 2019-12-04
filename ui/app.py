@@ -9,6 +9,7 @@ load_resources()
 
 class ClimateApp(App):
     dbm = None
+    stations = None
 
     # Create the app for our specific case "Piano App"
     def __init__(self, **kwargs):
@@ -27,7 +28,13 @@ class ClimateApp(App):
         connection created, false if an error was encountered
         '''
         self.dbm.set_login(user=user, password=password, host=host, db=db)
-        return self.dbm.create_connection()
+        result = self.dbm.create_connection()
+        self.get_stations()
+        return result
 
     def get_stations(self):
-        return ('1', '2', '3', '42')
+        self.stations = self.dbm.get_stations()
+        return self.stations
+
+    def call_procedure(self, procedure):
+        result = self.dbm.call_procedure(procedure)

@@ -103,6 +103,62 @@ class CreateScreen(CScreen):
         self.w_form = WForm()
         self.t_form = TForm()
 
+    def validate_data(self):
+        form = self.get_form()
+        val = form['val']
+        com = form['common']
+        ftype = None
+        for key in val:
+            if key == 'level':
+                ftype = 'p'
+                break
+            elif key == 'peak_speed':
+                ftype = 'w'
+                break
+            elif key == 'max':
+                ftype = 't'
+                break
+        for key in val:
+            if val[key] == -1:
+                return False
+        for key in com:
+            if com[key] == -1:
+                return False
+        return ftype, form
+
+    def submit_command(self):
+        if not self.validate_data():
+            print("Must fill out full form")
+            return False
+        ftype, form = self.validate_data()
+        val = form['val']
+        com = form['common']
+        procedure = None
+        date = com['date']
+        sid = com['sid']
+        t_type = com['t_type']
+        if ftype == 'p':
+            level = val['level']
+            procedure = "CALL add_precipitation_read('{}', '{}', {}, {})".format(
+                date, t_type.lower(), sid, level)
+        elif ftype == 'w':
+            ps = val['peak_speed']
+            pd = val['peak_dir']
+            asp = val['avg_speed']
+            ss = val['sust_speed']
+            sd = val['sust_dir']
+            procedure = "CALL add_wind_read('{}', '{}', {}, {}, {}, {}, {}, {})".format(
+                date, t_type.lower(), sid, ps, pd, ss, sd, asp
+            )
+        elif ftype == 't':
+            mx = val['max']
+            mn = val['min']
+            avg = val['avg']
+            procedure = "CALL add_temperature_read('{}', '{}', {}, {}, {}, {})".format(
+                date, t_type.lower(), sid, mx, mn, avg
+            )
+        App.get_running_app().call_procedure(procedure)
+
 
 class MainManager(ScreenManager):
     '''

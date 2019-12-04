@@ -46,6 +46,6 @@
             id: submit
             text: 'Submit'
             font_size: root.width/35
-            on_release: print(create_screen.get_form())
+            on_release: create_screen.submit_command()
             size_hint: .5, .10
             pos_hint: {'center_x':.5, 'center_y':.05}

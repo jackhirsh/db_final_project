@@ -81,6 +81,11 @@ class CForm(CFlay):
                 continue
         return w
 
+    def get_station_list(self):
+        stations = App.get_running_app().get_stations()
+        print("Stations: {}".format(stations))
+        return stations
+
 
 class PForm(CFlay):
 
@@ -151,5 +156,5 @@ class DatePicker(CFlay):
 
     def get_date(self):
         if self.day != '' and self.month != '' and self.year != '':
-            return self.day + '/' + self.month + '/' + self.year
+            return self.year + '-' + self.month + '-' + self.day
         return -1

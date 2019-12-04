@@ -23,12 +23,6 @@
 <CForm@CFlay>:
     idn: 'common_form'
     id: cform
-    canvas:
-        Color:
-            rgba: 1, 0, 0, .1
-        Rectangle:
-            size: self.size
-            pos: self.pos
     CLabel:
         size_hint: .2, .1
         pos_hint: {'center_x':.2, 'center_y':.85}
@@ -42,7 +36,8 @@
         pos_hint: {'center_x':.2, 'center_y':.65}
         font_size: root.width/35
         text: 'Station ID'
-        values: app.get_stations()
+        values: cform.get_station_list()
+        on_touch_down: self.values = app.get_stations()
     DatePicker:
         size_hint: 1, .5
         pos_hint: {'center_x':.5, 'center_y':.25}
@@ -112,12 +107,6 @@
         on_text: datepicker.year = self.text
     
 <PForm@CFlay>:
-    canvas:
-        Color:
-            rgba: 0, 0, 1, .1
-        Rectangle:
-            size: self.size
-            pos: self.pos
     CLabel:
         text: "Precipitation Level"
         color: hex("#4f545c")
@@ -134,12 +123,6 @@
         write_tab: False
 
 <WForm@CFlay>:
-    canvas:
-        Color:
-            rgba: 0, 0, 1, .1
-        Rectangle
-            size: self.size
-            pos: self.pos
     CLabel:
         text: "Peak Speed"
         color: hex("#4f545c")
@@ -209,12 +192,6 @@
         write_tab: False
 
 <TForm@CFlay>:
-    canvas:
-        Color:
-            rgba: 0, 0, 1, .1
-        Rectangle:
-            size: self.size
-            pos: self.pos
     CLabel:
         text: "Maximum"
 
