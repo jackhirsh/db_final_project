@@ -1,0 +1,60 @@
+#:kivy 1.11.1
+#:import hex kivy.utils.get_color_from_hex
+
+<EditScreen@CScreen>:
+    idn: 'e_screen'
+    id: e_screen
+    canvas:
+        Color:
+            rgba: hex("#d9d9d9")
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    CButton:
+        size_hint: 1, .05
+        pos_hint: {'center_x':.5, 'center_y':.95}
+        text: "Menu"
+        font_size: 18
+        on_release: e_screen.callbacks['switch']('main_menu')
+    CSpinner:
+        size_hint: 1, .05
+        pos_hint: {'center_x':.5, 'center_y':.9}
+        values: 'p', 't', 'w'
+        text: "Read Type"
+        on_text: dv.display_rows(self.text)
+    DataViewer:
+        id: dv
+        size_hint: .8, .8
+        pos_hint: {'center_x':.4, 'center_y':.4}
+    
+    CSpinner:
+        id: sel
+        text: "Select Result"
+        pos_hint: {'center_x':.9, 'center_y':.8}
+        size_hint: .1, .1
+        values: ('1', '2', '3', '4', '5', '6')
+
+    CButton:
+        text: "Delete"
+        pos_hint: {'center_x':.9, 'center_y':.7}
+        size_hint: .1, .1
+        on_release: dv.delete(sel.text)
+    CSpinner:
+        text: "Edit Field"
+        id: edit_f
+        pos_hint: {'center_x':.9, 'center_y':.6}
+        size_hint: .1, .1
+        values: ('6', '7', '8', '9', '10')
+
+    CInput:
+        id: new_val
+        size_hint: .1, .1
+        pos_hint: {'center_x':.9, 'center_y':.5}
+        font_size: root.width/50
+        multiline: False
+        write_tab: False
+    CButton:
+        text: "Update"
+        pos_hint: {'center_x':.9, 'center_y':.4}
+        size_hint: .1, .1
+        on_release: dv.update(edit_f.text, new_val.text, sel.text)

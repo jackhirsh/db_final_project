@@ -1,10 +1,11 @@
 from kivy.app import App
 from ui.screen_manager import MainManager
-from ui.mutils import load_resources
+from ui.mutils import load_resources, set_config
 from src import db_manager
 from kivy.config import Config
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 load_resources()
+set_config()
 
 
 class ClimateApp(App):
@@ -38,3 +39,24 @@ class ClimateApp(App):
 
     def call_procedure(self, procedure):
         result = self.dbm.call_procedure(procedure)
+
+    def print_all(self, t):
+        ftype = None
+        if t == 'p':
+            ftype = 'precipitation'
+        elif t == 'w':
+            ftype = 'wind'
+        elif t == 't':
+            ftype = 'temperature'
+        if ftype is None:
+            return False
+        rows = self.dbm.print_all(ftype)
+        if not rows:
+            return False
+        return rows
+
+    def delete(self, idn):
+        self.dbm.delete(idn)
+
+    def update(self, idn, field_no, new_val):
+        self.dbm.update(idn, field_no, new_val)

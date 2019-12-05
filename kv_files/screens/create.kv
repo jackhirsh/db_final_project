@@ -49,3 +49,11 @@
             on_release: create_screen.submit_command()
             size_hint: .5, .10
             pos_hint: {'center_x':.5, 'center_y':.05}
+
+        CButton:
+            id: back
+            text: 'Back'
+            font_size: root.width/40
+            size_hint: .15, .08
+            pos_hint: {'center_x':.075, 'center_y':.9}
+            on_release: create_screen.callbacks['switch']('main_menu')

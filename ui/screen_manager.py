@@ -1,10 +1,10 @@
 from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, ObjectProperty
 from kivy.app import App
 from kivy.clock import Clock
 from ui.custom_widgets import CScreen, PForm, TForm, WForm
 
-IGNORELOGIN = True
+IGNORELOGIN = False
 
 
 class MainMenuScreen(CScreen):
@@ -50,6 +50,10 @@ class LoginScreen(CScreen):
         return result
 
 
+class EditScreen(CScreen):
+    pass
+
+
 class CreateScreen(CScreen):
     p_form = None
     w_form = None
@@ -72,6 +76,8 @@ class CreateScreen(CScreen):
         return w.get_common()
 
     def get_form(self):
+        if self.l_form is None:
+            return False
         values = self.l_form.get_values()
         common = self.get_common()
         d = {'val': values, 'common': common}
@@ -105,6 +111,8 @@ class CreateScreen(CScreen):
 
     def validate_data(self):
         form = self.get_form()
+        if not form:
+            return False
         val = form['val']
         com = form['common']
         ftype = None
@@ -189,6 +197,9 @@ class MainManager(ScreenManager):
             {
                 'switch': self.select_screen}))
         self.add_screen('create', CreateScreen(
+            {
+                'switch': self.select_screen}))
+        self.add_screen('edit', EditScreen(
             {
                 'switch': self.select_screen}))
 

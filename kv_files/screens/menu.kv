@@ -32,6 +32,7 @@
             pos_hint: {'center_x':.5, 'center_y':.4}
             text: 'Edit Data'
             font_size: ((root.width+root.height)/60)
+            on_release: mm_screen.callbacks['switch']('edit')
         CButton:
             idn: 'plot_data'
             id: plot_button

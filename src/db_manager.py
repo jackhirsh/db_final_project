@@ -83,3 +83,31 @@ class DBManager:
             print("Executing: {}".format(procedure))
             cur.execute(procedure)
             return cur.fetchall()
+
+    def print_all(self, ftype):
+        if self.connection is None:
+            return False
+        with self.connection:
+            cur = self.connection.cursor()
+            cur.execute("CALL print_all_info('{}')".format(ftype))
+            print("Printing from dbm")
+            rows = cur.fetchall()
+            for row in rows:
+                print(row)
+
+            return rows
+
+    def delete(self, idn):
+        if self.connection is None:
+            return False
+        with self.connection:
+            cur = self.connection.cursor()
+            cur.execute("CALL delete_reading('{}')".format(idn))
+
+    def update(self, idn, field_no, new_val):
+        if self.connection is None:
+            return False
+        with self.connection:
+            cur = self.connection.cursor()
+            cur.execute("CALL edit_read_field({}, {}, {})".format(
+                idn, field_no, new_val))
